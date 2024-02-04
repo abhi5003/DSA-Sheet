@@ -268,3 +268,85 @@ class Solution {
       }
 }
 ```
+
+
+## Q:- [**Next Permutation**](https://leetcode.com/problems/next-permutation/)
+
+*   For example, the next permutation of `arr = [1,2,3]` is `[1,3,2]`.
+*   Similarly, the next permutation of `arr = [2,3,1]` is `[3,1,2]`.
+*   While the next permutation of `arr = [3,2,1]` is `[1,2,3]` because `[3,2,1]` does not have a lexicographical larger rearrangement.
+
+**Example 1:**
+
+**Input:** nums = \[1,2,3\] **Output:** \[1,3,2\]
+
+**Example 2:**
+
+**Input:** nums = \[3,2,1\] **Output:** \[1,2,3\]
+
+**Example 3:**
+
+**Input:** nums = \[1,1,5\] **Output:** \[1,5,1\]
+
+### 👌 Intuition
+
+> ![](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/7b9a78610607f8817ec1431ced32d2da05988287f8b1227b.png)
+> 
+> *   **Find the break-point, i:** Break-point means the _**first index i from the back of the given array**_ where arr\[i\] becomes smaller than arr\[i+1\].
+> *   **If such a break-point does not exist i.e. if the array is sorted in decreasing order,** the given permutation is the last one in the sorted order of all possible permutations. So, the next permutation must be the first i.e. the permutation in increasing order.  
+>     So, _**in this case, we will reverse the whole array and will return it as our answer.**_
+> *   **If a break-point exists:**
+>     *   Find the smallest number i.e. > arr\[i\] and in the right half of index i(i.e. from index i+1 to n-1) and swap it with arr\[i\].
+>     *   Reverse the entire right half(i.e. from index i+1 to n-1) of index i. And finally, return the array.
+
+```java
+class Solution {
+   public void nextPermutation(int[] nums) {
+    int n = nums.length; // size of the array.
+
+    // Step 1: Find the break point:
+    int ind = -1; // break point
+    for (int i = n - 2; i >= 0; i--) {
+        if (nums[i] < nums[i + 1]) {
+            // index i is the break point
+            ind = i;
+            break;
+        }
+    }
+
+    // If break point does not exist:
+    if (ind == -1) {
+        // reverse the whole array:
+        reverseArray(nums, 0, n - 1);
+        return;
+    }
+
+    // Step 2: Find the next greater element and swap it with nums[ind]
+    // Here traversing right left because array is sorted in decending order from break point
+    // So we will get smallest grater element than break point element
+    for (int i = n - 1; i > ind; i--) {
+        if (nums[i] > nums[ind]) {
+            // swapping
+            int tmp = nums[i];
+            nums[i] = nums[ind];
+            nums[ind] = tmp;
+            break;
+        }
+    }
+
+    // Step 3: reverse the right half:
+    reverseArray(nums, ind + 1, n - 1);
+}
+
+private void reverseArray(int[] nums, int start, int end) {
+    while (start < end) {
+        int temp = nums[start];
+        nums[start] = nums[end];
+        nums[end] = temp;
+        start++;
+        end--;
+    }
+}
+
+}
+```
