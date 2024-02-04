@@ -218,3 +218,53 @@ public class Solution {
 **Reason:** In this approach, we are also traversing the entire matrix 2 times and each traversal is taking O(N\*M) time complexity.
 
 **Space Complexity:** `O(1)` as we are not using any extra space.
+
+## **Q:-** [**Pascal's Triangle**](https://leetcode.com/problems/pascals-triangle/)
+
+![](https://upload.wikimedia.org/wikipedia/commons/0/0d/PascalTriangleAnimated2.gif)
+
+**Example 1:**
+
+**Input:** numRows = 5 **Output:** \[\[1\],\[1,1\],\[1,2,1\],\[1,3,3,1\],\[1,4,6,4,1\]\]
+
+**Example 2:**
+
+**Input:** numRows = 1 **Output:** \[\[1\]\]
+
+### 👌Intuition :-
+
+> Here at each level first and last column should to set 1.
+> 
+> And other middle column on that particular level would be sum of upper previous level left and right column at current column.
+
+```java
+class Solution {
+    public List<List<Integer>> generate(int numRows) {
+        
+        List<List<Integer>> result = new ArrayList<>();
+        
+        for(int i = 0 ; i < numRows; i++) {
+            List<Integer> list = new ArrayList<>();
+            
+            for(int j = 0; j < i+1 ; j++) {
+                if(j == 0 || j == i) {
+                    // adding 1 for first row
+                    // adding 1 for first and last col of each row
+                    list.add(1);
+                }
+                else {
+                    
+                    // if col is middele then get two previous elements
+                    // from reslut and add them and push to list
+
+                    int left = result.get(i - 1).get(j - 1);
+                    int right = result.get(i - 1).get(j);
+                    list.add(left + right);
+                }
+            }
+            result.add(list);
+         }
+        return result;
+      }
+}
+```
