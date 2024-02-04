@@ -392,3 +392,110 @@ class Solution {
     }
 }
 ```
+
+## **Q:-** [**Sort Colors**](https://leetcode.com/problems/sort-colors/)
+
+**Example 1:**
+
+**Input:** nums = \[2,0,2,1,1,0\] **Output:** \[0,0,1,1,2,2\]
+
+**Example 2:**
+
+**Input:** nums = \[2,0,1\] **Output:** \[0,1,2\]
+
+#### 👉 Better Approach
+
+### **Intuition:**
+
+> Keeping count of values
+> 
+>  Since in this case there are only 3 distinct values in the array so it’s easy to maintain the count of all, Like the count of 0, 1, and 2. This can be followed by overwriting the array based on the frequency(count) of the values.
+
+```java
+class Solution {
+    public void sortColors(int[] nums) {
+
+        int len=nums.length;
+        int zeroCount=0;
+        int oneCount=0;
+        int twoCount=0;
+
+        // count 0's, i's and 2 in array
+        for(int i=0; i<len; i++){
+            if(nums[i]==0) zeroCount++;
+            else if(nums[i]==1) oneCount++;
+            else twoCount++;
+        }
+
+        int idx=0;
+        while(zeroCount>0){
+            nums[idx++]=0;
+            zeroCount--;
+        }
+
+         while(oneCount>0){
+            nums[idx++]=1;
+            oneCount--;
+        }
+
+        while(twoCount>0){
+            nums[idx++]=2;
+            twoCount--;
+        }
+    }
+}
+```
+
+
+#### Optimal Approach
+
+### **👌 Intuition**
+
+> This algorithm contains 3 pointers i.e. low, mid, and high, and 3 main rules.  The rules are the following:
+> 
+> *   arr\[0….low-1\] contains 0. \[Extreme left part\]
+> *   arr\[low….mid-1\] contains 1.
+> *   arr\[high+1….n-1\] contains 2. \[Extreme right part\], n = size of the array
+
+![](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/35a4cfcbc72d453309a5622b1023bf98cb7e959214690bf2.png)
+
+**The steps will be the following:**
+
+1.  First, we will run a loop that will continue until **mid \<= high**.
+2.  There can be three different values of mid pointer i.e. arr\[mid\]
+    1.  **If arr\[mid\] == 0,** we will swap arr\[low\] and arr\[mid\] and will increment both low and mid. Now the subarray from index 0 to (low-1) only contains 0.
+    2.  **If arr\[mid\] == 1,** we will just increment the mid pointer and then the index (mid-1) will point to 1 as it should according to the rules.
+    3.  **If arr\[mid\] == 2,** we will swap arr\[mid\] and arr\[high\] and will decrement high. Now the subarray from index high+1 to (n-1) only contains 2.  
+        In this step, we will do nothing to the mid-pointer as even after swapping, the subarray from mid to high(_after decrementing high_) might be unsorted. So, we will check the value of mid again in the next iteration.
+3.  Finally, our array should be sorted.
+
+```java
+class Solution {
+    public void sortColors(int[] nums) {
+        int len=nums.length;
+
+        int low=0;
+        int mid=0;
+        int high=len-1;
+
+        while (mid <= high) {
+            if(nums[mid]==0){
+                swap(nums, low, mid);
+                low++;
+                mid++;
+            }else if(nums[mid]==1){
+                mid++;
+            }else{
+                swap(nums, mid, high);
+                high--;
+            }
+        }
+    }
+
+    void swap(int[] arr, int index1, int index2) {
+    int temp = arr[index1];
+    arr[index1] = arr[index2];
+    arr[index2] = temp;
+ }
+}
+```
