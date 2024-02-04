@@ -351,3 +351,44 @@ private void reverseArray(int[] nums, int start, int end) {
 
 }
 ```
+
+
+## Q:- [**Maximum Subarray**](https://leetcode.com/problems/maximum-subarray/)
+
+**Example 1:**
+
+**Input:** nums = \[-2,1,-3,4,-1,2,1,-5,4\] **Output:** 6 **Explanation:** The subarray \[4,-1,2,1\] has the largest sum 6.
+
+**Example 2:**
+
+**Input:** nums = \[1\] **Output:** 1 **Explanation:** The subarray \[1\] has the largest sum 1.
+
+**Example 3:**
+
+**Input:** nums = \[5,4,-1,7,8\] **Output:** 23 **Explanation:** The subarray \[5,4,-1,7,8\] has the largest sum 23.
+
+### **👌 Intuition:**
+
+_**Kadane Algorithm**_
+
+> _**A subarray with a sum less than 0 will always reduce our answer and so this type of subarray cannot be a part of the subarray with maximum sum.**_
+
+```java
+class Solution {
+    public int maxSubArray(int[] nums) {
+        int totalSum=Integer.MIN_VALUE;;
+        int currSum=0;
+        for(int i=0; i<nums.length; i++){
+           currSum+=nums[i];
+           
+           totalSum=Math.max(currSum, totalSum);
+           // if currSum becomes negative then set to 0
+           if(currSum<0){
+               currSum=0;
+           }
+        }
+
+        return totalSum;
+    }
+}
+```
