@@ -335,6 +335,7 @@ class Solution {
     }
 
     // Step 3: reverse the right half:
+   // Reversing because make as much smallest element 
     reverseArray(nums, ind + 1, n - 1);
 }
 
