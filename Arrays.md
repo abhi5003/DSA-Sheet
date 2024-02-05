@@ -499,3 +499,37 @@ class Solution {
  }
 }
 ```
+
+
+## Q:- [**Best Time to Buy and Sell Stock**](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/) 
+
+**Example 1:**
+
+**Input:** prices = \[7,1,5,3,6,4\] **Output:** 5 **Explanation:** Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6-1 = 5. Note that buying on day 2 and selling on day 1 is not allowed because you must buy before you sell.
+
+**Example 2:**
+
+**Input:** prices = \[7,6,4,3,1\] **Output:** 0 **Explanation:** In this case, no transactions are done and the max profit = 0.
+
+### **👌 Intuition**
+
+> **We will linearly travel the array. We can maintain a minimum from the start of the array and compare it with every element of the array, if it is greater than the minimum then take the difference and maintain it in max, otherwise update the minimum.**
+
+![](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/116b4bd7f453921ac340d84f125ccf60ba97e0c382908a3a.png)
+
+```java
+class Solution {
+    public int maxProfit(int[] prices) {
+        int len=prices.length;
+        int currPrice=Integer.MAX_VALUE;
+        int maxPrice=0;
+
+        for(int i=0; i<len; i++){
+           currPrice=Math.min(prices[i], currPrice);
+           maxPrice=Math.max(maxPrice, prices[i]-currPrice);
+        }
+
+        return maxPrice;
+    }
+}
+```
