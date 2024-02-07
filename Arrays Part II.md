@@ -119,3 +119,152 @@ class Solution {
     }
 }
 ```
+
+
+
+## **Q:-** [**Merge Without Extra Space**](https://www.geeksforgeeks.org/problems/merge-two-sorted-arrays-1587115620/1)
+
+**Example 1:**
+
+**Input**: 
+
+n = 4,  arr1\[\] = \[1 3 5 7\] 
+
+m = 5,  arr2\[\] = \[0 2 6 8 9\]
+
+**Output**: 
+
+arr1\[\] = \[0 1 2 3\]
+
+arr2\[\] = \[5 6 7 8 9\]
+
+**Approach 1 :-** Two pointer technique 
+
+### 👌 Intuition -
+
+> 1.  We will declare two pointers i.e. **left** and **right.** T**he left pointer will point to the last index of the arr1\[\]** (_i.e. Basically the maximum element of the array_). **The right pointer will point to the first index of the arr2\[\]** (_i.e. Basically the minimum element of the array_).
+> 2.  Now, the left pointer will move toward index 0 and the right pointer will move towards the index m-1. While moving the two pointers we will face 2 different cases like the following:
+>     1.  **If arr1\[left\] > arr2\[right\]:** In this case, we will swap the elements and move the pointers to the next positions.
+>     2.  **If arr1\[left\] \<= arr2\[right\]:** In this case, we will stop moving the pointers as arr1\[\] and arr2\[\] are containing correct elements.
+> 3.  Thus, after step 2, arr1\[\] will contain all smaller elements and arr2\[\] will contain all bigger elements. Finally, we will sort the two arrays.
+
+![](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/65bf02727eda34c62b4252c934bd7de3d594d7c2e098af1f.png)
+
+```java
+
+
+//User function Template for Java
+
+class Solution
+{
+    //Function to merge the arrays.
+    public static void merge(long arr1[], long arr2[], int n, int m) 
+    {
+        int left=n-1;
+        int right=0;
+        
+        // Swap the elements until arr1[left] is
+        // smaller than arr2[right]:
+        
+        while(left>=0 && right < m){
+            
+            if(arr1[left] > arr2[right]){
+                long temp=arr1[left];
+                arr1[left]=arr2[right];
+                arr2[right]=temp;
+                left--;
+                right++;
+            }else{
+                break;
+            }
+        }
+        
+        Arrays.sort(arr1);
+        Arrays.sort(arr2);
+    }
+}
+```
+
+
+
+**Approach 2 (Using gap method)**: 
+
+### **👌 Intuition:**
+
+> Similar to optimal approach 1, in this approach, we will use two pointers i.e. left and right, and swap the elements if the element at the left pointer is greater than the element at the right pointer. 
+> 
+> But the placing of the pointers will be based on the gap value calculated. The formula to calculate the initial gap is the following:
+> 
+> **Initial gap = ceil((size of arr1\[\] + size of arr2\[\]) / 2)**
+> 
+> **Assume the two arrays as a single continuous array and initially**, we will place the **left pointer at the first index** and the **right pointer at the (left+gap) index** of that continuous array.
+> 
+> Now, we will compare the elements at the left and right pointers and move them by 1 place each time after comparison. While comparing we will swap the elements if _**the element at the left pointer > the element at the right pointer**_. After some steps, the right pointer will reach the end and the iteration will be stopped.
+> 
+> After each iteration, we will decrease the gap and will follow the same procedure until the iteration for gap = 1 gets completed. Now, after each iteration, the gap will be the following:
+> 
+> **gap = ceil( previous gap / 2)**
+> 
+> The whole process will be applied to the imaginary continuous array constructed using arr1\[\] and arr2\[\].
+
+```java
+
+
+//User function Template for Java
+
+class Solution
+{
+    //Function to merge the arrays.
+    public static void merge(long arr1[], long arr2[], int n, int m) 
+    {
+        // len of the imaginary single array:
+       int len=n+m;
+       
+        // Initial gap:
+       int gap=(len/2) + (len%2); //  module either gives 0 or 1 in case of even or odd
+       
+       while(gap>0){
+           
+           // inisalize two pointers
+           int left=0;
+           int right=left+gap;
+           
+           // check for right pointer only because right will first goes out of the boundary
+           while(right < len){
+               
+               // case 1: left in arr1[]
+                //and right in arr2[]:
+                if(left < n && right >= n){
+                    swapIfGreater(arr1, arr2, left, right - n);
+                }
+                 // case 2: both pointers in arr2[]:
+                else if(left >= n){
+                    swapIfGreater(arr2, arr2, left - n, right - n);
+                }
+                
+                // case 3: both pointers in arr1[]:
+                else{
+                     swapIfGreater(arr1, arr1, left, right);
+                }
+                
+                left++;
+                right++;
+           }
+           
+            // break if iteration gap=1 is completed:
+            if (gap == 1) break;
+
+            // Otherwise, calculate new gap:
+            gap = (gap / 2) + (gap % 2);
+       }
+    }
+    
+    public static void swapIfGreater(long[] arr1, long[] arr2, int ind1, int ind2) {
+        if (arr1[ind1] > arr2[ind2]) {
+            long temp = arr1[ind1];
+            arr1[ind1] = arr2[ind2];
+            arr2[ind2] = temp;
+        }
+    }
+}
+```
