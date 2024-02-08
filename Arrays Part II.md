@@ -766,3 +766,101 @@ public class Solution {
     }
 }
 ```
+
+
+## Merge Sort Algorithm
+
+![](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/cedfb4d7c17a79820625a1923dae0466a36d7d21905edbe6.png)
+
+_Lets consider an array **arr\[\] = {38, 27, 43, 10}**_
+
+*   _Initially divide the array into two equal halves:_
+
+![Merge Sort: Divide the array into two halves](https://media.geeksforgeeks.org/wp-content/uploads/20230530153635/img1drawio.png)
+
+_Merge Sort: Divide the array into two halves_
+
+*   _These subarrays are further divided into two halves. Now they become array of unit length that can no longer be divided and array of unit length are always sorted._
+
+![Merge Sort: Divide the subarrays into two halves (unit length subarrays here)](https://media.geeksforgeeks.org/wp-content/uploads/20230530153654/img2drawio.png)
+
+_Merge Sort: Divide the subarrays into two halves (unit length subarrays here)_
+
+_These sorted subarrays are merged together, and we get bigger sorted subarrays._
+
+![Merge Sort: Merge the unit length subarrys into sorted subarrays](https://media.geeksforgeeks.org/wp-content/uploads/20230530153714/img3drawio.png)
+
+_Merge Sort: Merge the unit length subarrys into sorted subarrays_
+
+_This merging process is continued until the sorted array is built from the smaller subarrays._
+
+![Merge Sort: Merge the sorted subarrys to get the sorted array](https://media.geeksforgeeks.org/wp-content/uploads/20230530153747/img4drawio.png)
+
+```java
+import java.util.*;
+
+class Solution {
+    private static void merge(int[] arr, int low, int mid, int high) {
+        ArrayList<Integer> temp = new ArrayList<>(); // temporary array
+        int left = low;      // starting index of left half of arr
+        int right = mid + 1;   // starting index of right half of arr
+
+        //storing elements in the temporary array in a sorted manner//
+
+        while (left <= mid && right <= high) {
+            if (arr[left] <= arr[right]) {
+                temp.add(arr[left]);
+                left++;
+            } else {
+                temp.add(arr[right]);
+                right++;
+            }
+        }
+
+        // if elements on the left half are still left //
+
+        while (left <= mid) {
+            temp.add(arr[left]);
+            left++;
+        }
+
+        //  if elements on the right half are still left //
+        while (right <= high) {
+            temp.add(arr[right]);
+            right++;
+        }
+
+        // transfering all elements from temporary to arr //
+        for (int i = low; i <= high; i++) {
+            arr[i] = temp.get(i - low);
+        }
+    }
+
+    public static void mergeSort(int[] arr, int low, int high) {
+        if (low >= high) return;
+        int mid = (low + high) / 2 ;
+        mergeSort(arr, low, mid);  // left half
+        mergeSort(arr, mid + 1, high); // right half
+        merge(arr, low, mid, high);  // merging sorted halves
+    }
+}
+public class tUf {
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = 7;
+        int arr[] = { 9, 4, 7, 6, 3, 1, 5 };
+        System.out.println("Before sorting array: ");
+        for (int i = 0; i < n; i++) {
+            System.out.print(arr[i] + " ");
+        }
+        System.out.println();
+        Solution.mergeSort(arr, 0, n - 1);
+        System.out.println("After sorting array: ");
+        for (int i = 0; i < n; i++) {
+            System.out.print(arr[i] + " ");
+        }
+        System.out.println();
+    }
+
+}
+```
