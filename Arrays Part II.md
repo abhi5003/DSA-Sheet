@@ -268,3 +268,278 @@ class Solution
     }
 }
 ```
+
+
+
+## **Q:-** [**Find the Duplicate Number**](https://leetcode.com/problems/find-the-duplicate-number/)
+
+**Example 1:**
+
+**Input:** nums = \[1,3,4,2,2\]
+
+**Output:** 2
+
+**Example 2:**
+
+**Input:** nums = \[3,1,3,4,2\]
+
+**Output:** 3
+
+## **Q:-** [**Find the Duplicate Number**](https://leetcode.com/problems/find-the-duplicate-number/)
+
+**Example 1:**
+
+**Input:** nums = \[1,3,4,2,2\]
+
+**Output:** 2
+
+**Example 2:**
+
+**Input:** nums = \[3,1,3,4,2\]
+
+**Output:** 3
+
+## **Brute Force (2 Loops)**
+
+```java
+    // 2 Loops
+    public static int findDuplicate_2loops(int[] nums) {
+        int len = nums.length;
+        for (int i = 0; i < len; i++) {
+            for (int j = i + 1; j < len; j++) {
+                if (nums[i] == nums[j]) {
+                    return nums[i];
+                }
+            }
+        }
+
+        return len;
+    }
+```
+
+## **Analysis**
+
+*   **Time Complexity**: O(n2)O(n^2)_O_(_n_2)
+*   **Space Complexity**: O(1)O(1)_O_(1)
+
+## **Count**
+
+Count the frequency of the num in the array.
+
+With extra O(n)O(n)_O_(_n_) space, without modifying the input.
+
+```java
+    public static int findDuplicate(int[] nums) {
+        int len = nums.length;
+        int[] cnt = new int[len + 1];
+        for (int i = 0; i < len; i++) {
+            cnt[nums[i]]++;
+            if (cnt[nums[i]] > 1) {
+                return nums[i];
+            }
+        }
+
+        return len;
+    }
+```
+
+## **Analysis**
+
+*   **Time Complexity**: O(n)O(n)_O_(_n_)
+*   **Space Complexity**: O(n)O(n)_O_(_n_)
+
+## **Hash**
+
+```java
+    public static int findDuplicate_set(int[] nums) {
+        Set<Integer> set = new HashSet<>();
+        int len = nums.length;
+        for (int i = 0; i < len; i++) {
+            if (!set.add(nums[i])) {
+                return nums[i];
+            }
+        }
+
+        return len;
+    }
+```
+
+## **Analysis**
+
+*   **Time Complexity**: O(n)O(n)_O_(_n_)
+*   **Space Complexity**: O(n)O(n)_O_(_n_)
+
+## **Marking visited value within the array**
+
+```java
+    // Visited
+    public static int findDuplicate_mark(int[] nums) {
+        int len = nums.length;
+        for (int num : nums) {
+            int idx = Math.abs(num);
+            if (nums[idx] < 0) {
+                return idx;
+            }
+            nums[idx] = -nums[idx];
+        }
+
+        return len;
+    }
+```
+
+## **Analysis**
+
+*   **Time Complexity**: O(n)O(n)_O_(_n_)
+*   **Space Complexity**: O(1)O(1)_O_(1)
+
+## **Sort**
+
+```java
+    public static int findDuplicate_sort(int[] nums) {
+        Arrays.sort(nums);
+        int len = nums.length;
+        for (int i = 1; i < len; i++) {
+            if (nums[i] == nums[i - 1]) {
+                return nums[i];
+            }
+        }
+
+        return len;
+    }
+```
+
+## **Analysis**
+
+*   **Time Complexity**: O(nlogn)O(nlogn)_O_(_nlogn_)
+*   **Space Complexity**: O(logn)O(logn)_O_(_logn_)
+
+## **Index Sort**
+
+```java
+    // Index Sort
+    // n + 1 numbers in n.
+    public static int findDuplicate_index_sort(int[] nums) {
+        int len = nums.length;
+        for (int i = 0; i < len; ) {
+            int n = nums[i];
+            if (n == i + 1) {
+                i++;
+            } else if (n == nums[n - 1]) {
+                return n;
+            } else {
+                nums[i] = nums[n - 1];
+                nums[n - 1] = n;
+            }
+        }
+
+        return 0;
+    }
+```
+
+## **Analysis**
+
+*   **Time Complexity**: O(n)O(n)_O_(_n_)
+*   **Space Complexity**: O(1)O(1)_O_(1)
+
+## **Binary Search**
+
+```java
+    public static int findDuplicate_bs(int[] nums) {
+        int len = nums.length;
+        int low = 1;
+        int high = len - 1;
+        while (low < high) {
+            int mid = low + (high - low) / 2;
+            int cnt = 0;
+            for (int i = 0; i < len; i++) {
+                if (nums[i] <= mid) {
+                    cnt++;
+                }
+            }
+
+            if (cnt <= mid) {
+                low = mid + 1;
+            } else {
+                high = mid;
+            }
+        }
+
+        return low;
+    }
+```
+
+## **Analysis**
+
+*   **Time Complexity**: O(nlogn)O(nlogn)_O_(_nlogn_)
+*   **Space Complexity**: O(1)O(1)_O_(1)
+
+## **Bit**
+
+|   | 1 | 3 | 4 | 2 | 2 | x | y |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Bit 0 | 1 | 1 | 0 | 0 | 0 | 2 | 2 |
+| Bit 1 | 1 | 0 | 1 | 1 | 1 | 3 | 2 |
+| Bit 2 | 0 | 0 | 1 | 0 | 0 | 1 | 1 |
+
+```java
+    public static int findDuplicate_bit(int[] nums) {
+        int n = nums.length;
+        int ans = 0;
+        int bit_max = 31;
+        while (((n - 1) >> bit_max) == 0) {
+            bit_max -= 1;
+        }
+
+        for (int bit = 0; bit <= bit_max; ++bit) {
+            int x = 0, y = 0;
+            for (int i = 0; i < n; ++i) {
+                if ((nums[i] & (1 << bit)) != 0) {
+                    x += 1;
+                }
+                if (i >= 1 && ((i & (1 << bit)) != 0)) {
+                    y += 1;
+                }
+            }
+            if (x > y) {
+                ans |= 1 << bit;
+            }
+        }
+
+        return ans;
+    }
+```
+
+## **Analysis**
+
+*   **Time Complexity**: O(nlogn)O(nlogn)_O_(_nlogn_)
+*   **Space Complexity**: O(1)O(1)_O_(1)
+
+## **Fast Slow Pointers**
+
+![Link List](https://assets.leetcode.com/users/images/aeb3e536-9615-466c-a2de-88a9a59ef255_1648626512.666411.png)
+
+With extra O(n)O(n)_O_(_n_) space, without modifying the input.
+
+```java
+    public int findDuplicate_fastSlow(int[] nums) {
+        int slow = 0;
+        int fast = 0;
+        do {
+            slow = nums[slow];
+            fast = nums[nums[fast]];
+        } while (slow != fast);
+
+        slow = 0;
+        while (slow != fast) {
+            slow = nums[slow];
+            fast = nums[fast];
+        }
+        
+        return slow;
+    }
+```
+
+## **Analysis**
+
+*   **Time Complexity**: O(n)O(n)_O_(_n_)
+*   **Space Complexity**: O(1)O(1)_O_(1)
