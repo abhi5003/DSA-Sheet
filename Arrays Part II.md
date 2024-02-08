@@ -543,3 +543,239 @@ With extra O(n)O(n)_O_(_n_) space, without modifying the input.
 
 *   **Time Complexity**: O(n)O(n)_O_(_n_)
 *   **Space Complexity**: O(1)O(1)_O_(1)
+
+
+
+## Q:- [**Find Missing And Repeating**](https://www.geeksforgeeks.org/problems/find-missing-and-repeating2512/1)
+
+**Example 1:**
+
+**Input:** N = 2 Arr\[\] = {2, 2}
+
+**Output:** 2 1
+
+**Explanation:** Repeating number is 2 and smallest positive missing number is 1.
+
+**Example 2:**
+
+**Input:** N = 3 Arr\[\] = {1, 3, 3}
+
+**Output:** 3 2
+
+**Explanation:** Repeating number is 3 and smallest positive missing number is 2.
+
+### **Approach:** Using HashMap
+
+```java
+// Java program to find the
+// repeating and missing elements
+// using Maps
+
+import java.util.*;
+
+public class Test1 {
+
+	public static void main(String[] args)
+	{
+
+		int[] arr = { 4, 3, 6, 2, 1, 1 };
+
+		Map<Integer, Boolean> numberMap
+			= new HashMap<>();
+
+		int max = arr.length;
+
+		for (Integer i : arr) {
+
+			if (numberMap.get(i) == null) {
+				numberMap.put(i, true);
+			}
+			else {
+				System.out.println("Repeating = " + i);
+			}
+		}
+		for (int i = 1; i <= max; i++) {
+			if (numberMap.get(i) == null) {
+				System.out.println("Missing = " + i);
+			}
+		}
+	}
+}
+```
+
+### **Approach:** 
+
+**Use elements as Index and mark the visited places**
+
+```java
+// Java program to Find the repeating
+// and missing elements
+
+import java.io.*;
+
+class GFG {
+
+	static void printTwoElements(int arr[], int size)
+	{
+		int i;
+		System.out.print("The repeating element is ");
+
+		for (i = 0; i < size; i++) {
+			int abs_val = Math.abs(arr[i]);
+			if (arr[abs_val - 1] > 0)
+				arr[abs_val - 1] = -arr[abs_val - 1];
+			else
+				System.out.println(abs_val);
+		}
+
+		System.out.print("and the missing element is ");
+		for (i = 0; i < size; i++) {
+			if (arr[i] > 0)
+				System.out.println(i + 1);
+		}
+	}
+
+	// Driver code
+	public static void main(String[] args)
+	{
+		int arr[] = { 7, 3, 4, 5, 5, 6, 2 };
+		int n = arr.length;
+		printTwoElements(arr, n);
+	}
+}
+
+
+```
+
+
+### Approach
+
+**Using cycle sort**
+
+```java
+import java.util.*;
+
+class FindCorruptPair {
+    public static int[] findCorruptPair(int[] nums) {
+        // Initialize missing and duplicated
+        int duplicated = 0;
+        int missing = 0;
+        int[] pair = {
+            0,
+            0
+        };
+        // Apply cyclic sort on the array
+        // Traversing the whole array
+        int i = 0;
+        while (i < nums.length) {
+            // Determining what position the specific element should be at
+            int correct = nums[i] - 1;
+            //Check if the number is at wrong position
+            if (nums[i] != nums[correct]) {
+                // Swapping the number to it's correct position
+                swap(nums, i, correct);
+            } else {
+                i = i + 1;
+            }
+        }
+        // Finding the corrupt pair(missing, duplicated)     
+        for (int j = 0; j < nums.length; j++) {
+            if (nums[j] != j + 1) {
+                duplicated = nums[j];
+                missing = j + 1;
+            }
+
+        }
+        pair[0] = missing;
+        pair[1] = duplicated;
+
+        return pair;
+    }
+    // Function for swapping
+    public static void swap(int[] arr, int first, int second) {
+        int temp = arr[first];
+        arr[first] = arr[second];
+        arr[second] = temp;
+    }
+    // Driver code
+    public static void main(String[] args) {
+
+        int[][] array = {{3, 1, 2, 5, 2},
+                        {3, 1, 2, 3, 6, 4},
+                        {4, 1, 2, 1, 6, 3},
+                        {4, 3, 4, 5, 1},
+                        {5, 3, 5, 6, 2, 1}};
+        
+        for (int i = 0; i < array.length; i++) {
+            System.out.print(i + 1);
+            System.out.print(".\tGiven array: " + Arrays.toString(array[i]));
+            System.out.print("\n\tCorrupt pair: ");
+            System.out.print(findCorruptPair(array[i])[0]);
+            System.out.print(", ");
+            System.out.println(findCorruptPair(array[i])[1]);
+            System.out.println(new String(new char[100]).replace('\0', '-'));
+        }
+
+    }
+
+}
+```
+
+
+
+### Approach
+
+**Using Bit Manipulation**
+
+```java
+public class Solution {
+    public static int[] findMissingRepeatingNumbers(int []a) {
+        // Write your code here
+        int n = a.length; // size of the array
+        int xr = 0;
+
+        //Step 1: Find XOR of all elements:
+        for (int i = 0; i < n; i++) {
+            xr = xr ^ a[i];
+            xr = xr ^ (i + 1);
+        }
+
+        //Step 2: Find the differentiating bit number:
+        int number = (xr & ~(xr - 1));
+
+        //Step 3: Group the numbers:
+        int zero = 0;
+        int one = 0;
+        for (int i = 0; i < n; i++) {
+            //part of 1 group:
+            if ((a[i] & number) != 0) {
+                one = one ^ a[i];
+            }
+            //part of 0 group:
+            else {
+                zero = zero ^ a[i];
+            }
+        }
+
+        for (int i = 1; i <= n; i++) {
+            //part of 1 group:
+            if ((i & number) != 0) {
+                one = one ^ i;
+            }
+            //part of 0 group:
+            else {
+                zero = zero ^ i;
+            }
+        }
+
+        // Last step: Identify the numbers:
+        int cnt = 0;
+        for (int i = 0; i < n; i++) {
+            if (a[i] == zero) cnt++;
+        }
+
+        if (cnt == 2) return new int[] {zero, one};
+        return new int[] {one, zero};
+    }
+}
+```
