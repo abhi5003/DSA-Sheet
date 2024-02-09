@@ -124,3 +124,50 @@ public static boolean searchMatrix(int[][] matrix, int target) {
     return false;
 }
 ```
+
+
+## Q:- [**Pow(x, n)**](https://leetcode.com/problems/powx-n/)
+
+Implement [pow(x, n)](http://www.cplusplus.com/reference/valarray/pow/), which calculates `x` raised to the power `n` (i.e., `xn`).
+
+**Example 1:**
+
+**Input:** x = 2.00000, n = 10
+
+**Output:** 1024.00000
+
+**Example 2:**
+
+**Input:** x = 2.10000, n = 3
+
+**Output:** 9.26100
+
+**Example 3:**
+
+**Input:** x = 2.00000, n = -2
+
+**Output:** 0.25000
+
+**Explanation:** 2-2 = 1/22 = 1/4 = 0.25
+
+**What we are doing here :-** 
+
+![](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/8482777fc49da6abb451980eac1f7e75fb026a0cb45ff407.png)
+
+```java
+ public double myPow(double x, int n) {
+        
+        if(n==0) return 1;
+        else if(n<0){
+            return 1/x * myPow(1/x, -(n+1));
+        }
+        else{
+           double ans =myPow(x, n/2);
+           if(n%2!=0){
+               return (ans*ans)*x;
+           }else{
+               return (ans*ans);
+           }
+        }
+    }
+```
