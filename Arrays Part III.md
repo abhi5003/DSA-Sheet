@@ -562,3 +562,141 @@ public class Solution {
 }
 ```
 
+
+
+## Q:- [**Reverse Pairs**](https://leetcode.com/problems/reverse-pairs/)
+
+![](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/3536eff62daa5ad43b67220b6cab756d89e5ab3796b3fae9.png)
+
+**Solution:**
+
+This question is slightly different from the question [count inversion](https://takeuforward.org/data-structure/count-inversions-in-an-array/) where the condition was a\[i\] > a\[j\] but here in this question, the condition is a\[i\] > 2\*a\[j\]. In both questions, the index i \< j.
+
+### **Naive Approach (Brute-force)**:
+
+### **Approach:**
+
+The steps are as follows:
+
+1.  First, we will run a loop(say i) from 0 to N-1 to select the a\[i\].
+2.  As index j should be greater than index i, inside loop i, we will run another loop i.e. j from i+1 to N-1, and select the element a\[j\].
+3.  Inside this second loop, we will check if a\[i\] > 2\*a\[j\] i.e. if a\[i\] and a\[j\] can be a pair. If they satisfy the condition, we will increase the count by 1.
+4.  Finally, we will return the count i.e. the number of such pairs.
+
+### **Intuition:**
+
+The naive approach is pretty straightforward. We will use nested loops to generate all possible pairs. We know index i must be smaller than index j. So, we will fix i at one index at a time through a loop, and with another loop, we will check(_the condition a\[i\] > 2\*a\[j\]_) the elements from index i+1 to N-1  if they can form a pair with a\[i\].
+
+```java
+
+import java.util.*;
+
+public class tUf {
+
+    public static int countPairs(int[] a, int n) {
+
+        // Count the number of pairs:
+        int cnt = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (a[i] > 2 * a[j])
+                    cnt++;
+            }
+        }
+        return cnt;
+    }
+
+    public static int reversPair(int[] skill, int n) {
+        return countPairs(skill, n);
+    }
+
+    public static void main(String[] args) {
+        int[] a = {4, 1, 2, 3, 1};
+        int n = 5;
+        int cnt = team(a, n);
+        System.out.println("The number of reverse pair is: " + cnt);
+    }
+}  
+```
+
+
+### 👌 **Optimal Approach**:
+
+### **Intuition:**
+
+In order to solve this problem we will use the merge sort algorithm like we used in the problem [count inversion](https://takeuforward.org/data-structure/count-inversions-in-an-array/) with a slight modification of the merge() function. But in this case, **the same logic will not work**. In order to understand this, we need to deep dive into the merge() function.
+
+**Why the same logic of** [**count inversion**](https://takeuforward.org/data-structure/count-inversions-in-an-array/) **will not work?**
+
+*   The merge function works by comparing two elements from two halves i.e. arr\[left\] and arr\[right\]. Now, the condition in the question was arr\[i\] > arr\[j\]. That is why we merged the logic. While comparing the elements, we counted the number of pairs.
+*   But in this case, the condition is arr\[i\] > 2\*arr\[j\]. And, we cannot change the condition of comparing the elements in the merge() function. If **we change the condition, the merge() function will fail to merge the elements**. So, we need to check this **condition and count the number of pairs separately**.
+
+```java
+class Solution {
+    public int reversePairs(int[] nums) {
+         return invCount(nums, 0, nums.length-1);
+    }
+
+    private int invCount(int[] A, int start, int end) {
+    int MOD = 1000000007;
+    if (start == end)
+      return 0;
+
+    int mid = (start + end) / 2;
+    int x = invCount(A, start, mid) % MOD;
+    int y = invCount(A, mid + 1, end) % MOD;
+    int z = merge(A, start, mid, end) % MOD;
+    return (x + y + z) % MOD;
+  }
+
+  private int merge(int[] A, int start, int mid, int end) {
+    int count = 0;
+    int p1 = start;
+    int p2 = mid + 1;
+    int p3 = 0;
+    int[] c = new int[end - start + 1];
+    while(p1<=mid && p2<=end){
+        if((long)A[p1]>(long)2*A[p2]){
+             count += (mid - p1 + 1);
+             p2++;
+        }else{
+            p1++;
+        }
+    }
+    p1=start;
+    p2=mid+1;
+    while (p1 <= mid && p2 <= end) {
+      if (A[p1] <= A[p2]) {
+        c[p3] = A[p1];
+        p1++;
+        p3++;
+      } else {
+        c[p3] = A[p2];
+        p2++;
+        p3++;
+        
+      }
+    }
+    while (p1 <= mid) {
+      c[p3] = A[p1];
+      p1++;
+      p3++;
+    }
+
+    while (p2 <= end) {
+      c[p3] = A[p2];
+      p2++;
+      p3++;
+    }
+
+    p3 = 0;
+    for (int i = start; i <= end; i++) {
+      A[i] = c[p3];
+      p3++;
+    }
+    return count;
+
+  }
+}
+```
+
