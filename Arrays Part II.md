@@ -1064,3 +1064,162 @@ class Solution {
     }
 }
 ```
+
+
+
+## **Q: -** [**Majority Element (N/3)**](https://leetcode.com/problems/majority-element-ii/)
+
+![](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/3bab49e93717d49b797aea4aa7a6a27c1fc553674e434c9d.png)
+
+**Observation:** How many integers can occur more than floor(N/3) times in the given array:
+
+> _**there can be a maximum of 2 majority elements.**_
+
+### **Naive Approach (Brute-force)**:
+
+1.  We will run a loop that will select the elements of the array one by one.
+2.  Now, for each unique element, we will run another loop and count its occurrence in the given array.
+3.  If any element occurs more than the floor of (N/3), we will include it in our answer. 
+4.  While traversing if we find any element that is already included in our answer, we will just skip it.
+
+```java
+    public static List<Integer> majorityElement(int []v) {
+        int n = v.length; //size of the array
+        List<Integer> ls = new ArrayList<>(); // list of answers
+
+        for (int i = 0; i < n; i++) {
+            //selected element is v[i]:
+            // Checking if v[i] is not already
+            // a part of the answer:
+            if (ls.size() == 0 || ls.get(0) != v[i]) {
+                int cnt = 0;
+                for (int j = 0; j < n; j++) {
+                    // counting the frequency of v[i]
+                    if (v[j] == v[i]) {
+                        cnt++;
+                    }
+                }
+
+                // check if frquency is greater than n/3:
+                if (cnt > (n / 3))
+                    ls.add(v[i]);
+            }
+
+            if (ls.size() == 2) break;
+        }
+
+        return ls;
+    }
+```
+
+
+### **Better Approach (Using Hashing)**: 
+
+### **Intuition:**
+
+Use a better data structure to reduce the number of look-up operations and hence the time complexity. Moreover, we have been calculating the count of the same element again and again – so we have to reduce that also.
+
+### **Approach:** 
+
+The steps are as follows:
+
+1.  Use a hashmap and store the elements as \<key, value> pairs. (Can also use frequency array based on the size of nums).  
+    Here the key will be the element of the array and the value will be the number of times it occurs. 
+2.  Traverse the whole array and update the occurrence of each element. 
+3.  After that, check the map if the value for any element is greater than the **floor of N/3**. 
+    1.  If yes, include it in the list. 
+    2.  Else iterate forward.
+4.  Finally, return the list.
+
+```java
+    public static List<Integer> majorityElement(int []v) {
+        int n = v.length; //size of the array
+        List<Integer> ls = new ArrayList<>(); // list of answers
+
+        //declaring a map:
+        HashMap<Integer, Integer> mpp = new HashMap<>();
+
+        // least occurrence of the majority element:
+        int mini = (int)(n / 3) + 1;
+
+        //storing the elements with its occurnce:
+        for (int i = 0; i < n; i++) {
+            int value = mpp.getOrDefault(v[i], 0);
+            mpp.put(v[i], value + 1);
+
+            //checking if v[i] is
+            // the majority element:
+            if (mpp.get(v[i]) == mini) {
+                ls.add(v[i]);
+            }
+            if (ls.size() == 2) break;
+        }
+
+        return ls;
+    }
+```
+
+
+### 👌 **Optimal Approach (Extended Boyer Moore’s Voting Algorithm)**:
+
+### **Approach:**
+
+1.  Initialize 4 variables:  
+    **cnt1 & cnt2** –  for tracking the counts of elements  
+    **el1 & el2** – for storing the majority of elements.
+2.  Traverse through the given array.
+    1.  If **cnt1** is 0 and the current element is not el2 then store the current element of the array as **el1 along with increasing the cnt1 value by 1**.
+    2.  If **cnt2** is 0 and the current element is not el1 then store the current element of the array as **el2 along with increasing the cnt2 value by 1**.
+    3.  If the current element and **el1** are the same increase the **cnt1** by 1.
+    4.  If the current element and **el2** are the same increase the **cnt2** by 1.
+    5.  Other than all the above cases: decrease cnt1 and cnt2 by 1.
+3.  The integers present in **el1 & el2** should be the result we are expecting. So, using another loop, we will manually check their counts if they are greater than the floor(N/3).
+
+![](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/6fa38cc5f4e85f20c4431558101ec1cd42472396d4ec53ea.png)
+
+```java
+class Solution {
+    public List<Integer> majorityElement(int[] nums) {
+        int n = nums.length; //size of the array
+
+        int cnt1 = 0, cnt2 = 0; // counts
+        int el1 = Integer.MIN_VALUE; // element 1
+        int el2 = Integer.MIN_VALUE; // element 2
+
+        // applying the Extended Boyer Moore's numsoting Algorithm:
+        for (int i = 0; i < n; i++) {
+            if (cnt1 == 0 && el2 != nums[i]) {
+                cnt1 = 1;
+                el1 = nums[i];
+            } else if (cnt2 == 0 && el1 != nums[i]) {
+                cnt2 = 1;
+                el2 = nums[i];
+            } else if (nums[i] == el1) cnt1++;
+            else if (nums[i] == el2) cnt2++;
+            else {
+                cnt1--; cnt2--;
+            }
+        }
+
+        List<Integer> ls = new ArrayList<>(); // list of answers
+
+        // Manually check if the stored elements in
+        // el1 and el2 are the majority elements:
+        cnt1 = 0; cnt2 = 0;
+        for (int i = 0; i < n; i++) {
+            if (nums[i] == el1) cnt1++;
+            if (nums[i] == el2) cnt2++;
+        }
+
+        int mini = (int)(n / 3) + 1;
+        if (cnt1 >= mini) ls.add(el1);
+        if (cnt2 >= mini) ls.add(el2);
+
+        // Uncomment the following line
+        // if it is told to sort the answer array:
+        //Collections.sort(ls); //TC --> O(2*log2) ~ O(1);
+
+        return ls;
+    }
+}
+```
