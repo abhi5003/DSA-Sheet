@@ -455,3 +455,136 @@ class Solution {
 }
 ```
 
+## Q:- [**Unique Paths**](https://leetcode.com/problems/unique-paths/)
+
+![](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/99d6a64d499b0bab277f8d821f24bae43f7ce8184519ee4a.png)
+
+**Explanation: \*\* From the top left corner there is a total o**f 3\*\* ways to reach the bottom right corner.
+
+**Step 1:** Right ->> Right ->> Down
+
+![](https://lh5.googleusercontent.com/IAzEYfiKE6DchH4oK2tf6P2omhORyaei5olLJ3Domv8Ky8N_hrG-6w4tquKM17FLZQvtKaioA4UkgDj1U8zcWOYkzVL_tgjFIwTjQpB_f1ouIp_yQrnazgd2-ieV5-sKp2lrEhzt)
+
+**Step 2:** Right ->> Down ->> Right
+
+![](https://lh6.googleusercontent.com/rcKQmVQ7jtcGsO98t7cZiA6S1VzZAV4YXW5v_C4hWC6led7bTOjaPmsZXeQEG2r7BaSKqMw0CTce6_919COT9qNeFYQHK_gt1SToefOov7kVAn_sJwZTH69izuepyTTo9sAiNehM)
+
+**Step 3:** Down ->> Right->> Right
+
+![](https://lh3.googleusercontent.com/0fJMMZyDIe-z7EcpiIpAzIPovX5C3WJUGsAqfwHHGIxXc5yrxUqK8Y87P4yeWVEVbjIynLxN142751YKmfsnpguBTyjNn1aNzDoDtR2oo39o1cPjJuaXKqWbo9ghx9BbxgLc0n9M)
+
+## **Solution**
+
+_**Disclaimer**_: _Don’t jump directly to the solution, try it out yourself first._
+
+**Approach**: The problem states that we can either move rightward or downward direction. So we recursively try out all the possible combinations.
+
+1.  At first, we are at the **(0,0)** index let’s assume this state as **(i,j).** From here we can move towards the bottom as well as towards the right and we recursively move until we hit the base case.
+
+![](https://lh4.googleusercontent.com/SEgVVsDHe3SNZ0GtYHBhSNIxfBV1bjQYXJ_zbLh3hQJO0GuWt8ruWoLx_3vWzNZJlR5VnTBk0KXgblCd11Mu1NZdJfhr8t7fO8JevbvSI0ODvYeLqfToI_hZOwjfM_U3RDTUb885)
+
+![](https://lh6.googleusercontent.com/bu9FxbN-MrDGUY73zhok8X7u-dv421b6PdmVgULIETlLjVQ1u3xM83tWD4y1I0hR0AgJ68GkgMptD94XfONLEPlrnA_gfg44SYKL6RnVBAyhiIE1I2P325IrYPsV-rANi3F9EvOk)
+
+2\. At any point of time when the recursive call goes out of the matrix boundary **(example: let’s assume m = 2, n= 2, and the current position of i and j is (2,0) which is out of matrix boundary)**, we’ll return zero because from here there are no possible paths beyond and that is the first base case.
+
+![](https://lh6.googleusercontent.com/wrmMhfQRdsMQCOydlQ517m0nJ2wUKMWbHP9GMbUuj6CSQV1aWXa1lM7wbIGTHMbzh6rfThYT2fCZSSS6fOIdaTdi38v1oDHMRLFv1dZE_QTIfP0eGh8V7Fulq57NbLOiEik5_yXJ)
+
+![](https://lh6.googleusercontent.com/StgnXvK44FzWWltaFmHqw7Vj9WoRTbgzqSYjfocwKk6r9yxtoTKWTxoQ5m8dmabjD2laGNq0qh0EKhuNU6s5u_8Z6Fp0qg5OLG5jI8L2qpAGYOQWNCfP1g416bGfTQ2EIwe28Sti)
+
+3\. Whenever the recursive call reaches the end we’ll return **1** because we have found one possible path to reach the end.
+
+![](https://lh5.googleusercontent.com/uxUYTFyxi7M1zNkBQa3oc1Gc30nieewflWGj62Xw0sQo-bRFcnqmddF-Q9x8aO9P703DKOo0oYoUP5sG2kXKA_dDIHaC_yqrhXOUolRnmDr9MvU1HNH0vmyNPt3pn5WS3zJH8F2K)
+
+![](https://lh6.googleusercontent.com/fRX-ys65xTQwL5naNe6krcGr8_slCefQbYLGrsGAzevwkMiQctJcxSlB2YB1rjDW4W99gcABIMnsvTgZcDrFHrXaAvNBETzAufDA3rcsxeotNGhkr0lwLqonfQMf6Nf_vSCgMfKo)
+
+4\. In the recursive tree what result we have got from the left transition and the right transition will sum it up and return the answer.
+
+![](https://lh6.googleusercontent.com/bEE5PtHZP3E7z105IY431kD8n1WtQiLzNWc8dI6ig3eJc_9ge1G8F0o9PGcXb45kvRiiZ90h7jZaxhP_Q85B6_bmCiJVCepX9T8QGHJo6cGWnOBFKKj88lM3cQCf8qT2WpSxygXf)
+
+![](https://lh6.googleusercontent.com/KFPX5YL0-B5bIYsC5zO0Z9vffVKOQL3aYRNzRzmvPZz-JlAZX-zg41-HDnnZ50dd-zu45VTDvmZO_WhpstARiQj64TWpbirMzP2_YzpIuU7qOp3ekghQ6ps3RDWx1nFsRq05yoTY)
+
+```java
+public class Solution {
+    public int countPaths(int i, int j, int n, int m) {
+        if (i == (n - 1) && j == (m - 1))
+            return 1;
+        if (i >= n || j >= m)
+            return 0;
+        else
+            return countPaths(i + 1, j, n, m) + countPaths(i, j + 1, n, m);
+    }
+
+    public int uniquePaths(int m, int n) {
+        return countPaths(0, 0, m, n);
+    }
+
+    public static void main(String[] args) {
+        Solution obj = new Solution();
+        int totalCount = obj.uniquePaths(3, 7);
+        System.out.println("The total number of Unique Paths are " + totalCount);
+    }
+}
+```
+
+
+###  👌 **Solution 2:** [**Dynamic Programming**](https://takeuforward.org/data-structure/dynamic-programming-introduction/) **Solution**
+
+**Intuition**: The dynamic programming solution of this problem is a bit extension of the recursive solution. In recursive solutions, there are many overlapping subproblems. In this solution instead of traversing all the possible paths, whenever we get the result we’ll store it in a matrix for future use. Whenever we encounter the same subproblem we directly get the value from the matrix instead of recomputing it. By this memorization technique, we can avoid the recomputation and the time complexity will be drastically reduced. This is the main intuition behind this dynamic programming solution.
+
+**Approach**: 
+
+**Step 1**: Take a dummy matrix **A\[ \]\[ \]** of size **m X n** and fill it with **\-1.**
+
+**Step 2**: At first, we are at the **(0,0)** index let’s assume this state as **(i,j).** From here we can move towards the bottom as well as towards the right and we recursively move until we hit the base case.
+
+![](https://lh3.googleusercontent.com/JbkiIcUEFeQ8HXy5TNF1BEH_ZleehN5RnUIUcXPb2AjMVw9tjE6V25L8aftQ5nQ6_vgNEzAYnKzsUgWJY3hmDmW2nVv5_BjsQ-Q9moK6YBEJCNjaUH1qtW11ovWtv6AEf7sWUlQm)
+
+![](https://lh6.googleusercontent.com/bu9FxbN-MrDGUY73zhok8X7u-dv421b6PdmVgULIETlLjVQ1u3xM83tWD4y1I0hR0AgJ68GkgMptD94XfONLEPlrnA_gfg44SYKL6RnVBAyhiIE1I2P325IrYPsV-rANi3F9EvOk)
+
+**Step 3:** At any point of time when the recursive call goes out of the boundary **(example: let’s assume m = 2, n= 3, and the current position of i and j is (2,0) which is out of matrix boundary)**, we will return zero because from here there are no possible paths beyond and that is the first base case.
+
+![](https://lh5.googleusercontent.com/ev2JMXBF8xOucsE0EmohQmbsF5w7eO9dgjJnIiIT-iNfhttpO-PGAh1DfKd0bh8of_CVjyjWBFoiQAhvIyXtXkDyklUX96B5ntKc7Gv-qZva__nexG3j3ErUzQgUhVr6_dY2fv7p)
+
+![](https://lh6.googleusercontent.com/StgnXvK44FzWWltaFmHqw7Vj9WoRTbgzqSYjfocwKk6r9yxtoTKWTxoQ5m8dmabjD2laGNq0qh0EKhuNU6s5u_8Z6Fp0qg5OLG5jI8L2qpAGYOQWNCfP1g416bGfTQ2EIwe28Sti)
+
+**Step 4:** Whenever the recursive call reaches the end we’ll return **1** because we have found one possible path to reach the end.
+
+![](https://lh4.googleusercontent.com/R3CRSmmUq26ErlnwW8TGPIHPEuBB8qtJQ3guCjCvJ2iX12_pFASM7exyumTQOpS8E5y1O8GvLFIkkCADoDyaY2QLP1fj-QMUpX3bv47jxPc0e0HF83EqDxKHcm5nXu3aPUX4NSJW)
+
+![](https://lh4.googleusercontent.com/rGBaBSkM2YQktqwc-D5dvvL36TdYKV38Yu-kXFDqG9RZheXY1nA7lz5UbNxdbSz1RAX_Me9MJs-Q6KefTWypE7JJkF_OcxQjD_32DxdLkxR3iMqr39xb_DJFWzuZazd3m--Q4-pe)
+
+**Step 5:** The only change in the dynamic programming solution is whenever we are returning answers we store them in the matrix **A\[i\]\[j\]** and wherever we are making a recursive call we simply check if that state is already visited or not in other words we’ll check if **A\[i\]\[j\]** is **\-1** or not if it is not **\-1** that means that there is a subproblem which is repeating. Now instead of recomputing the subproblem, we’ll return the value at **A\[i\]\[j\].**
+
+**![](https://lh4.googleusercontent.com/DwOp_Jd_aEVUCWI93KeRKAF0JdwAFNkOf66exqQ93Iv_6GhEk6Gkz0gJEhCfrY0eo7Ps6Wge2zDqBsDHsdx4P9DjO92l4dG1fCecMH_aZzQ0wwI89Z322VxLqsg5EH_jgBnpH2YF)**
+
+**![](https://lh4.googleusercontent.com/JNtfoDqNrcSvpCyBW8SxIu6vR94SzZrAKkfO83CJ8kPJLA1cM9LiE7TszPWRFINxduB5cpx55v7E--k-EKnfa-igqr3ylx1vbVARY4YVSe3xYVdSFP81dRBqaqUgJizhkwUW-kuz)**
+
+```java
+import java.util.Arrays;
+
+public class Solution {
+    public int countPaths(int i, int j, int n, int m, int[][] dp) {
+        if (i == (n - 1) && j == (m - 1)) return 1;
+        if (i >= n || j >= m) return 0;
+        if (dp[i][j] != -1) return dp[i][j];
+        else return dp[i][j] = countPaths(i + 1, j, n, m, dp) + countPaths(i, j + 1, n, m, dp);
+    }
+
+    public int uniquePaths(int m, int n) {
+        int[][] dp = new int[m][n];
+        for (int[] row : dp) Arrays.fill(row, -1);
+
+        int num = countPaths(0, 0, m, n, dp);
+        if (m == 1 && n == 1)
+            return num;
+        return dp[0][0];
+    }
+
+    public static void main(String[] args) {
+        Solution obj = new Solution();
+        int totalCount = obj.uniquePaths(3, 7);
+        System.out.println("The total number of Unique Paths are " + totalCount);
+    }
+}
+```
+
