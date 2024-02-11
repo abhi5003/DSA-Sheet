@@ -941,3 +941,126 @@ public class tUf {
     }
 }
 ```
+
+
+## **Q:-** [**Majority Element (N/2)**](https://leetcode.com/problems/majority-element/)
+
+![](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/16a0bd01789f3e1ca73a7bb73857182b3009a5d00051dc2a.png)
+
+### **Naive Approach**:
+
+### **Approach:**
+
+The steps are as follows:
+
+1.  We will run a loop that will select the elements of the **array one by one**.
+2.  Now, for each element, we will **run another loop and count its occurrence** in the given array.
+3.  If any element occurs more than the floor of (N/2), we will simply return it.
+
+```java
+ public static int majorityElement(int []v) {
+        //size of the given array:
+        int n = v.length;
+
+        for (int i = 0; i < n; i++) {
+            //selected element is v[i]
+            int cnt = 0;
+            for (int j = 0; j < n; j++) {
+                // counting the frequency of v[i]
+                if (v[j] == v[i]) {
+                    cnt++;
+                }
+            }
+
+            // check if frquency is greater than n/2:
+            if (cnt > (n / 2))
+                return v[i];
+        }
+
+        return -1;
+    }
+```
+
+
+### **Solution 2 (Better):**
+
+### **Intuition**:
+
+Use a better data structure to reduce the number of look-up operations and hence the time complexity. Moreover, we have been calculating the count of the same element again and again – so we have to reduce that also.
+
+### **Approach**:
+
+1.  Use a hashmap and store as _(key,_ value) pairs. (Can also use frequency array based on the size of nums) 
+2.  Here the key will be the element of the array and the value will be the number of times it occurs. 
+3.  Traverse the array and update the value of the key. Simultaneously check if the value is greater than the **floor of N/2**. 
+    1.  If yes, return the key 
+    2.  Else iterate forward.
+
+```java
+ public static int majorityElement(int []v) {
+        //size of the given array:
+        int n = v.length;
+
+        //declaring a map:
+        HashMap<Integer, Integer> mpp = new HashMap<>();
+
+        //storing the elements with its occurnce:
+        for (int i = 0; i < n; i++) {
+            int value = mpp.getOrDefault(v[i], 0);
+            mpp.put(v[i], value + 1);
+        }
+
+        //searching for the majority element:
+        for (Map.Entry<Integer, Integer> it : mpp.entrySet()) {
+            if (it.getValue() > (n / 2)) {
+                return it.getKey();
+            }
+        }
+
+        return -1;
+    }
+```
+
+
+### 👌 **Optimal Approach**: **Moore’s Voting Algorithm:**
+
+### **Approach:**
+
+1.  Initialize 2 variables:  
+    **Count** –  for tracking the count of element  
+    **Element** – for which element we are counting
+2.  Traverse through the given array.
+    1.  If **Count** is 0 then store the current element of the array as **Element**.
+    2.  If the current element and **Element** are the same increase the **Count** by 1.
+    3.  If they are different decrease the **Count** by 1.
+3.  The integer present in **Element** should be the result we are expecting
+
+```java
+class Solution {
+    public int majorityElement(int[] nums) {
+        int majorEle=nums[0]; // Element
+        int ctn=1;  // count
+
+         // //applying the algorithm:
+         for(int i=1; i<nums.length; i++){
+             if(ctn==0){
+                ctn++;
+                majorEle=nums[i]; 
+             }else if(majorEle==nums[i]){
+                 ctn++;
+             }else ctn--;
+         }
+
+        //checking if the stored element
+        // is the majority element:
+
+         int ctn1=0;
+         for(int i=0; i<nums.length; i++){
+             if(nums[i]==majorEle) ctn1++;
+         }
+
+         if(ctn1>nums.length/2) return majorEle; 
+        return -1;
+    }
+}
+```
