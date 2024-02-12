@@ -1,6 +1,6 @@
 # Q:- [Set Matrix Zeroes](https://leetcode.com/problems/set-matrix-zeroes/)
 
-![](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/01505ee25bab15db0c8a3c21ad1406c462cbf534a10947c4.png)
+![](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/003ae8d49dd70bf27dd821aa8792738c698b5d23294cee47.png)
 
 **Brute Force -**
 
@@ -290,7 +290,7 @@ class Solution {
 
 ### 👌 Intuition
 
-> ![](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/7b9a78610607f8817ec1431ced32d2da05988287f8b1227b.png)
+> ![](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/7d151620df5e457983b3795fe64e9295db779be75e6636ab.png)
 > 
 > *   **Find the break-point, i:** Break-point means the _**first index i from the back of the given array**_ where arr\[i\] becomes smaller than arr\[i+1\].
 > *   **If such a break-point does not exist i.e. if the array is sorted in decreasing order,** the given permutation is the last one in the sorted order of all possible permutations. So, the next permutation must be the first i.e. the permutation in increasing order.  
