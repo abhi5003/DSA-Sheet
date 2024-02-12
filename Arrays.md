@@ -457,7 +457,7 @@ class Solution {
 > *   arr\[low….mid-1\] contains 1.
 > *   arr\[high+1….n-1\] contains 2. \[Extreme right part\], n = size of the array
 
-![](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/35a4cfcbc72d453309a5622b1023bf98cb7e959214690bf2.png)
+![](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/711dacc6450647fd47d5cd68ba1f23e517bab6fde0d63d51.png)
 
 **The steps will be the following:**
 
